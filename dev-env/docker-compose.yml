@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  postgresql:
+    image: bitnami/postgresql:14.7.0
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=postgres
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
