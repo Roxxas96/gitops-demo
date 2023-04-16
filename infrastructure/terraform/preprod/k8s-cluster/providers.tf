@@ -1,0 +1,37 @@
+terraform {
+  required_providers {
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.9.0"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.19.0"
+    }
+  }
+}
+
+variable "kubeconfig_path" {
+  type        = string
+  description = "Path to kubeconfig file"
+  default     = "~/.kube/gitops-demo"
+}
+
+variable "kubeconfig_context" {
+  type        = string
+  description = "Context to use in kubeconfig"
+  default     = "gitops-demo-preprod"
+}
+
+provider "kubernetes" {
+  config_path    = var.kubeconfig_path
+  config_context = var.kubeconfig_context
+}
+
+provider "helm" {
+  kubernetes {
+    config_path    = var.kubeconfig_path
+    config_context = var.kubeconfig_context
+  }
+}

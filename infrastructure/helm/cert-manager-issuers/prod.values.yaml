@@ -1,0 +1,4 @@
+clusterIssuers:
+  letsencrypt:
+    enabled: true
+    email: "prod@gitops-demo.a-gomez.fr"

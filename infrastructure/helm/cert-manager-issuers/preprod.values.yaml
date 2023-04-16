@@ -1,0 +1,5 @@
+clusterIssuers:
+  letsencrypt:
+    enabled: true
+    staging: true
+    email: "preprod@gitops-demo.a-gomez.fr"
