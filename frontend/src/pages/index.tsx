@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
-import "./App.css";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AlertColor,
   Button,
@@ -11,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import NewWordModal from "./components/NewWordModal";
-import InfoSnackbar from "./components/InfoSnackbar";
+import NewWordModal from "@/components/NewWordModal";
+import InfoSnackbar from "@/components/InfoSnackbar";
 
 type RandomWordResponse = {
   data: {
@@ -21,13 +20,13 @@ type RandomWordResponse = {
   };
 };
 
-function App() {
+export default function Home() {
   const services = useMemo(
-    () => process.env.REACT_APP_SERVICES_URL?.split(";") || [],
+    () => process.env.NEXT_PUBLIC_SERVICES_URL?.split(";") || [],
     []
   );
 
-  const [modalState, setModalState] = React.useState({
+  const [modalState, setModalState] = useState({
     open: false,
     service: 0,
   });
@@ -35,9 +34,9 @@ function App() {
     setModalState({ open: true, service });
   const handleCloseModal = () => setModalState({ open: false, service: 0 });
 
-  const [words, setWords] = React.useState<string[]>([]);
+  const [words, setWords] = useState<string[]>([]);
 
-  const [snackBarState, setSnackBarState] = React.useState({
+  const [snackBarState, setSnackBarState] = useState({
     open: false,
     message: "",
     severity: "success",
@@ -140,5 +139,3 @@ function App() {
     </Container>
   );
 }
-
-export default App;
