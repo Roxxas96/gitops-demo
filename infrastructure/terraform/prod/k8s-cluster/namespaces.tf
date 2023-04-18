@@ -5,10 +5,10 @@ module "namespace_words" {
   domain = "app"
 
   quota = {
-    requests_cpu    = "400m"
-    requests_memory = "512Mi"
-    limits_cpu      = "600m"
-    limits_memory   = "768Mi"
+    requests_cpu    = "1400m"
+    requests_memory = "1792Mi"
+    limits_cpu      = "2200m"
+    limits_memory   = "2816Mi"
   }
 
   admins  = var.cluster_admins

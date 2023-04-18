@@ -1,0 +1,11 @@
+auth:
+  # Default database
+  database: "word"
+
+primary:
+  initdb:
+    scripts:
+      create-databases.sql: |
+        CREATE DATABASE word1;
+        CREATE DATABASE word2;
+        CREATE DATABASE word3;
