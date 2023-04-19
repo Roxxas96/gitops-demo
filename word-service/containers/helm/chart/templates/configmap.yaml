@@ -1,0 +1,11 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "word-service.fullname" . }}-config
+data:
+  database_name: {{ .Values.config.database_name | quote }}
+  database_username: {{ .Values.config.database_username | quote }}
+  database_password: {{ .Values.config.database_password | quote }}
+  database_port: {{ .Values.config.database_port | quote }}
+  database_host: {{ .Values.config.database_host | quote }}
+  database_dialect: {{ .Values.config.database_dialect | quote }}
