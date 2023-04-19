@@ -20,11 +20,16 @@ type RandomWordResponse = {
   };
 };
 
-export default function Home() {
-  const services = useMemo(
-    () => process.env.NEXT_PUBLIC_SERVICES_URL?.split(";") || [],
-    []
-  );
+export async function getServerSideProps() {
+  return {
+    props: {
+      services: process.env.SERVICES_URL?.split(";") || [],
+    },
+  };
+}
+
+export default function Home({ services }: { services: string[] }) {
+  console.log(process.env.SERVICES_URL);
 
   const [modalState, setModalState] = useState({
     open: false,
