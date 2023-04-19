@@ -1,0 +1,23 @@
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-issuer"
+  hosts:
+    - host: www.gitops-demo.a-gomez.fr
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: frontend-tls
+      hosts:
+        - www.gitops-demo.a-gomez.fr
