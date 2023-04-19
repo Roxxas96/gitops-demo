@@ -34,7 +34,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: NEXT_PUBLIC_SERVICES_URL
+            - name: SERVICES_URL
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "frontend.fullname" . }}-config
