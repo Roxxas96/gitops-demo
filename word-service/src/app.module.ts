@@ -16,9 +16,7 @@ import { Environment } from './environments';
       password: process.env.DATABASE_PASSWORD || 'postgres',
       database: process.env.DATABASE_NAME || 'word1',
       autoLoadModels: true,
-      synchronize: process.env.NODE_ENV != Environment.Production,
-      logging:
-        process.env.NODE_ENV === Environment.Production ? false : console.log,
+      synchronize: true,
     }),
     WordModule,
   ],
