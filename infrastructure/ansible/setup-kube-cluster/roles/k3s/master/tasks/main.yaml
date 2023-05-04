@@ -1,0 +1,38 @@
+- name: Verify that k3s token exists
+  stat:
+    path: /var/lib/rancher/k3s/server/node-token
+  register: token_exists
+
+- name: Download & Install k3s
+  when: not token_exists.stat.exists
+  block:
+    - name: Download k3s
+      uri:
+        url: https://get.k3s.io
+        dest: /etc/k3s.sh
+        mode: u+x
+
+    - name: Install k3s master
+      shell: INSTALL_K3S_EXEC="server --cluster-init --disable traefik --tls-san {{master_ip}} {{aditional_k3s_args}}" /etc/k3s.sh
+
+- name: Get k3s token
+  slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: master_token
+
+- name: Store k3s token
+  set_fact:
+    master_token: "{{master_token.content | b64decode | regex_replace('\n', '')}}"
+
+- name: Change server in kubeconfig
+  lineinfile:
+    path: /etc/rancher/k3s/k3s.yaml
+    regexp: "^    server: https://127.0.0.1:6443"
+    line: "    server: https://{{master_ip}}:6443"
+
+- name: Copy kubeconfig
+  fetch:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: ~/.kube/gitops-demo-prod.kubeconfig
+    flat: yes
+    mode: 644
