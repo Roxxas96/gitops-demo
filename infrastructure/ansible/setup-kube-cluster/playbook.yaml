@@ -1,0 +1,15 @@
+- name: Setup master
+  hosts: master
+  remote_user: vagrant
+  gather_facts: no
+  become: yes
+  roles:
+    - k3s/master
+
+- name: Setup nodes
+  hosts: node
+  remote_user: vagrant
+  gather_facts: no
+  become: yes
+  roles:
+    - k3s/node

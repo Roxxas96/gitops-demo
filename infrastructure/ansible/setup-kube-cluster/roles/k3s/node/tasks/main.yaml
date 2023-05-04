@@ -1,0 +1,16 @@
+- name: Verify that k3s node password exists
+  stat:
+    path: /etc/rancher/node/password
+  register: password_exists
+
+- name: Download & Install k3s
+  when: not password_exists.stat.exists
+  block:
+    - name: Download k3s
+      uri:
+        url: https://get.k3s.io
+        dest: /etc/k3s.sh
+        mode: u+x
+
+    - name: Install k3s node
+      shell: INSTALL_K3S_EXEC="agent --server https://{{master_ip}}:6443 --token {{hostvars.master.master_token}}" /etc/k3s.sh

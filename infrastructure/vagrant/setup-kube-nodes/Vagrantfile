@@ -2,8 +2,8 @@ Vagrant.configure("2") do |config|
   # Configure provider
   config.vm.provider :libvirt do |libvirt|
     libvirt.driver = "qemu"
-    libvirt.memory = 4096
-    libvirt.cpus = 2
+    libvirt.memory = 8192
+    libvirt.cpus = 4
   end
 
   config.vm.box = "debian/bullseye64"
@@ -18,6 +18,21 @@ Vagrant.configure("2") do |config|
   config.vm.define "master" do |master|
     master.vm.hostname = "master"
     master.vm.network "private_network", ip: MASTER_IP
+
+    # Setup k3s cluster with Ansible
+    master.vm.provision "ansible" do |ansible|
+      ansible.playbook = "../../ansible/setup-kube-cluster/playbook.yaml"
+      # Run playbook all VMs in one run
+      ansible.limit = "all"
+      ansible.groups = {
+        "master" => ["master"],
+        "node" => ["node-[1:#{NODES}]"],
+        "all:vars" => {
+          "master_ip" => MASTER_IP,
+          "aditional_k3s_args" => ""
+        }
+      }
+    end
   end
 
   NODES = 3
