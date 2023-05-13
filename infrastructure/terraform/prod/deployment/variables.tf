@@ -1,5 +1,5 @@
 variable "domain" {
   type        = string
   description = "The domain name of the monitoring tools"
-  default     = "127.0.0.1.sslip.io"
+  default     = "192.168.10.10.sslip.io"
 }

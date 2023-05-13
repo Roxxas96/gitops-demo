@@ -10,7 +10,7 @@ terraform {
 variable "vault_address" {
   type        = string
   description = "The address of the Vault server"
-  default     = "https://vault.gitops-demo.a-gomez.fr"
+  default     = "https://vault.192.168.10.10.sslip.io"
 }
 
 variable "vault_token" {
