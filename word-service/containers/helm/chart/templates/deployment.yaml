@@ -52,8 +52,8 @@ spec:
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "word-service.fullname" . }}-secret
-                  key: database_password
+                  name: postgres-postgresql
+                  key: postgres-password
             - name: DATABASE_PORT
               valueFrom:
                 configMapKeyRef:
