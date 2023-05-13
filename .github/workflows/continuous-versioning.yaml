@@ -1,0 +1,44 @@
+name: Versioning
+
+on:
+  push:
+    branches: ["**"]
+
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: "5.x"
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+      - name: Format version
+        if: steps.gitversion.outputs.CommitsSinceVersionSource > 0
+        run: |
+          echo "BUILD_VERSION=${{ steps.gitversion.outputs.MajorMinorPatch }}-rc${{ steps.gitversion.outputs.CommitsSinceVersionSource }}" >> $GITHUB_ENV
+      - name: Format version for release
+        if: steps.gitversion.outputs.CommitsSinceVersionSource == 0
+        run: |
+          echo "BUILD_VERSION=${{ steps.gitversion.outputs.MajorMinorPatch }}" >> $GITHUB_ENV
+      - name: Bump Version
+        run: |
+          sed -i "/\"version\":/c\  \"version\": \"$BUILD_VERSION\"," ./frontend/package.json
+          sed -i "/\"version\":/c\  \"version\": \"$BUILD_VERSION\"," ./word-service/package.json
+          sed -i "/appVersion:/c\appVersion: \'$BUILD_VERSION\'" ./frontend/containers/helm/chart/Chart.yaml
+          sed -i "/appVersion:/c\appVersion: \'$BUILD_VERSION\'" ./word-service/containers/helm/chart/Chart.yaml
+      - name: Commit Version Bump
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: [skip ci] bump version to ${{ env.BUILD_VERSION }}"
+          commit_options: "-a"
+          commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
