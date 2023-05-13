@@ -15,13 +15,13 @@ terraform {
 variable "kubeconfig_path" {
   type        = string
   description = "Path to kubeconfig file"
-  default     = "~/.kube/gitops-demo"
+  default     = "~/.kube/gitops-demo-prod.kubeconfig"
 }
 
 variable "kubeconfig_context" {
   type        = string
   description = "Context to use in kubeconfig"
-  default     = "gitops-demo-prod"
+  default     = "default"
 }
 
 provider "kubernetes" {

@@ -20,7 +20,7 @@ terraform {
 variable "vault_address" {
   type        = string
   description = "The address of the Vault server"
-  default     = "https://vault.gitops-demo.a-gomez.fr"
+  default     = "https://vault.192.168.10.10.sslip.io"
 }
 
 variable "vault_token" {
@@ -37,13 +37,13 @@ provider "vault" {
 variable "kubeconfig_path" {
   type        = string
   description = "Path to kubeconfig file"
-  default     = "~/.kube/gitops-demo"
+  default     = "~/.kube/gitops-demo-prod.kubeconfig"
 }
 
 variable "kubeconfig_context" {
   type        = string
   description = "Context to use in kubeconfig"
-  default     = "gitops-demo-prod"
+  default     = "default"
 }
 
 provider "kubernetes" {
