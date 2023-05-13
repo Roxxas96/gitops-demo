@@ -1,0 +1,6 @@
+argoNamespace: argocd
+
+clusters:
+repositories:
+projects:
+applications:
