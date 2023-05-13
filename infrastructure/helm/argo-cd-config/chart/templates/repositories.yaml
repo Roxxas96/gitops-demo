@@ -1,0 +1,19 @@
+{{- range $k, $v := .Values.repositories }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $k }}-repository
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  type: git
+  url: {{ $v.url }}
+  {{- if $v.https }}
+  password: {{ $v.https.password }}
+  username: {{ $v.https.username }}
+  {{- end }}
+  {{- if $v.ssh }}
+  sshPrivateKey: {{ $v.ssh.privateKey | quote }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,45 @@
+{{- range $k, $v := .Values.applications }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $k }}
+spec:
+  project: {{ $v.project }}
+  source:
+    {{- with $v.source }}
+    repoURL: {{ .repoURL }}
+    targetRevision: {{ .targetRevision }}
+    path: {{ .path }}
+    {{- if .helm }}
+    helm:
+      {{- if .helm.releaseName }}
+      releaseName: {{ .helm.releaseName }}
+      {{- end }}
+      valueFiles:
+        {{- range .helm.valueFiles }}
+        - {{ . }}
+        {{- end }}
+      {{- if .helm.extraParameters }}
+      parameters:
+        {{- range $k, $v := .helm.extraParameters }}
+        - name: {{ $k }}
+          value: {{ $v }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- end }}
+  {{- if $v.destination }}
+  destination:
+    {{- with $v.destination }}
+    server: {{ .server }}
+    namespace: {{ .namespace }}
+    {{- end }}
+  {{- end }}
+  {{- if eq $v.syncPolicy "automated" }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  {{- end }}
+{{- end }}

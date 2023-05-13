@@ -1,0 +1,14 @@
+{{- range $k, $v := .Values.clusters }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $k }}-cluster
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+type: Opaque
+stringData:
+  name: {{ $k }}
+  server: {{ $v.server }}
+  config: {{ $v.config | quote }}
+{{- end }}

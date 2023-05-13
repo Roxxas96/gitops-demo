@@ -1,0 +1,71 @@
+{{- range $k, $v := .Values.projects }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: {{ $k }}
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: {{ $v.description | default "" }}
+  {{- if $v.sourceRepos }}
+  sourceRepos:
+    {{- range $v.sourceRepos }}
+    - {{ . }}
+    {{- end}}
+  {{- end}}
+  {{- if $v.destinations }}
+  destinations:
+    {{- range $v.destinations }}
+    - namespace: {{ .namespace }}
+      server: {{ .server }}
+    {{- end}}
+  {{- end}}
+  {{- if $v.clusterResourceWhitelist }}
+  clusterResourceWhitelist:
+    {{- range $v.clusterResourceWhitelist }}
+    - group: {{ .group }}
+      kind: {{ .kind }}
+    {{- end}}
+  {{- end}}
+  {{- if $v.clusterResourceBlacklist }}
+  namespaceResourceBlacklist:
+    {{- range $v.namespaceResourceBlacklist }}
+    - group: {{ .group }}
+      kind: {{ .kind }}
+    {{- end}}
+  {{- end}}
+  {{- if $v.namespaceResourceWhitelist }}
+  namespaceResourceWhitelist:
+    {{- range $v.namespaceResourceWhitelist }}
+    - group: {{ .group }}
+      kind: {{ .kind }}
+    {{- end}}
+  {{- end}}
+  {{- if $v.roles }}
+  roles:
+    {{- range $v.roles }}
+    - name: {{ .name }}
+      description: {{ .description }}
+      {{- if .policies }}
+      policies:
+        {{- range .policies }}
+        - {{ . }}
+        {{- end}}
+      {{- end}}
+      {{- if .groups }}
+      groups:
+        {{- range .groups }}
+        - {{ . }}
+        {{- end}}
+      {{- end}}
+      {{- if .jwtTokens }}
+      jwtTokens:
+        {{- range .jwtTokens }}
+        - iat: {{ .iat }}
+        {{- end}}
+      {{- end}}
+    {{- end}}
+  {{- end}}
+{{- end}}
