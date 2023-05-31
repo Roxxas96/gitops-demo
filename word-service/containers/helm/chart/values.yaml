@@ -17,7 +17,9 @@ fullnameOverride: ''
 config:
   database_name: 'word'
   database_username: 'postgres'
-  database_password: 'postgres'
+  database_password:
+    secretName: 'postgres-postgresql'
+    secretKey: 'postgres-password'
   database_port: 5432
   database_host: 'postgres-postgresql'
   database_dialect: 'postgres'
