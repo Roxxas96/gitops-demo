@@ -52,8 +52,8 @@ spec:
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-postgresql
-                  key: postgres-password
+                  name: {{.Values.config.database_password.secretName}}
+                  key: {{.Values.config.database_password.secretKey}}
             - name: DATABASE_PORT
               valueFrom:
                 configMapKeyRef:
