@@ -148,6 +148,26 @@ export class WordController {
     });
   }
 
+  @Post('clear')
+  @HttpCode(204)
+  clear() {
+    return new Promise((resolve, reject) => {
+      this.wordService
+        .clear()
+        .then(() => {
+          return resolve({});
+        })
+        .catch(() => {
+          return reject(
+            new HttpException(
+              'Internal Server Error',
+              HttpStatus.INTERNAL_SERVER_ERROR,
+            ),
+          );
+        });
+    });
+  }
+
   @Post('random')
   @HttpCode(200)
   random() {

@@ -131,4 +131,18 @@ export class WordService {
         });
     });
   }
+
+  clear() {
+    return new Promise((resolve, reject) => {
+      this.wordModel
+        .destroy({ truncate: true })
+        .then(() => {
+          return resolve({});
+        })
+        .catch((error) => {
+          this.logger.error(error.message);
+          return error;
+        });
+    });
+  }
 }
