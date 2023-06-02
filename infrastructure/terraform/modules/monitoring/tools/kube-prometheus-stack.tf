@@ -40,7 +40,7 @@ resource "kubernetes_ingress_v1" "grafana" {
 
     annotations = {
       "kubernetes.io/ingress.class"    = "nginx"
-      "cert-manager.io/cluster-issuer" = "letsencrypt-issuer"
+      "cert-manager.io/cluster-issuer" = "letsencrypt-prod-issuer"
     }
   }
 

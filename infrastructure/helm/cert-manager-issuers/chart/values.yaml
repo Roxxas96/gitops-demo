@@ -1,0 +1,4 @@
+clusterIssuers:
+  letsencrypt:
+    enabled: true
+    email: "local@noreply.com"
