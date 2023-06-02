@@ -68,4 +68,6 @@ resource "kubernetes_ingress_v1" "grafana" {
       }
     }
   }
+
+  count = var.enable_ingress ? 1 : 0
 }

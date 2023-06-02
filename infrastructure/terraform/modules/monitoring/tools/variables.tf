@@ -12,3 +12,9 @@ variable "domain" {
   type        = string
   description = "The domain name of the monitoring tools"
 }
+
+variable "enable_ingress" {
+  type        = bool
+  description = "Enable ingress resources for grafana"
+  default     = true
+}
