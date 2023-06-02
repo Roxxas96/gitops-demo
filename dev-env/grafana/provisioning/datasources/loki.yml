@@ -1,0 +1,9 @@
+apiVersion: 1
+
+datasources:
+  - name: Loki
+    uid: webstore-logs
+    type: loki
+    url: http://loki:3100
+    editable: false
+    isDefault: false

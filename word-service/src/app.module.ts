@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { WordModule } from './word/word.module';
 import { Dialect } from 'sequelize';
-import { Environment } from './environments';
 
 @Module({
   imports: [
