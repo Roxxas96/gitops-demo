@@ -1,0 +1,78 @@
+repositories:
+  gitops-demo:
+    url: git@github.com:Roxxas96/gitops-demo.git
+
+projects:
+  words:
+    description: "Project that holds all the applications to run the words demo"
+    sourceRepos:
+      - git@github.com:Roxxas96/gitops-demo.git
+    destinations:
+      - namespace: words
+        server: https://kubernetes.default.svc
+
+applications:
+  prod-word-service-1:
+    project: words
+    source:
+      repoURL: git@github.com:Roxxas96/gitops-demo.git
+      targetRevision: main
+      path: word-service/containers/helm/chart
+      helm:
+        releaseName: word-service-1
+        valueFiles:
+          - ../prod.values.yaml
+        extraParameters:
+          config.database_name: word1
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: words
+    syncPolicy: "manual"
+  prod-word-service-2:
+    project: words
+    source:
+      repoURL: git@github.com:Roxxas96/gitops-demo.git
+      targetRevision: main
+      path: word-service/containers/helm/chart
+      helm:
+        releaseName: word-service-2
+        valueFiles:
+          - ../prod.values.yaml
+        extraParameters:
+          config.database_name: word2
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: words
+    syncPolicy: "manual"
+  prod-word-service-3:
+    project: words
+    source:
+      repoURL: git@github.com:Roxxas96/gitops-demo.git
+      targetRevision: main
+      path: word-service/containers/helm/chart
+      helm:
+        releaseName: word-service-3
+        valueFiles:
+          - ../prod.values.yaml
+        extraParameters:
+          config.database_name: word3
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: words
+    syncPolicy: "manual"
+  prod-frontend:
+    project: words
+    source:
+      repoURL: git@github.com:Roxxas96/gitops-demo.git
+      targetRevision: main
+      path: frontend/containers/helm/chart
+      helm:
+        releaseName: frontend
+        valueFiles:
+          - ../prod.values.yaml
+        extraParameters:
+          config.services_url: "http://localhost:8081;http://localhost:8082;http://localhost:8083"
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: words
+    syncPolicy: "manual"

@@ -3,6 +3,8 @@ module "ingress" {
 
   environment = "prod"
 
-  ingress-nginx-namespace = module.namespace_ingress-nginx.namespace
-  cert-manager-namespace  = module.namespace_cert-manager.namespace
+  ingress-nginx-namespace = module.namespace_ingress-nginx[0].namespace
+  cert-manager-namespace  = module.namespace_cert-manager[0].namespace
+
+  count = var.enable_ingress ? 1 : 0
 }

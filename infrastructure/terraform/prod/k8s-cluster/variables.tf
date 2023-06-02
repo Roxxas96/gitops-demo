@@ -15,3 +15,9 @@ variable "cluster_devs" {
   description = "The users that will have cluster-reader privileges"
   default     = []
 }
+
+variable "enable_ingress" {
+  type        = bool
+  description = "Enable ingress controller & cert-manager"
+  default     = true
+}
