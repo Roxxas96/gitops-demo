@@ -1,5 +1,4 @@
 clusterIssuers:
   letsencrypt:
     enabled: true
-    staging: true
-    email: "preprod@gitops-demo.a-gomez.fr"
+    email: "preprod@192.168.10.10.sslip.io"

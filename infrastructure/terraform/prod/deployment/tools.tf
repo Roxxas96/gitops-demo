@@ -41,7 +41,7 @@ resource "kubernetes_ingress_v1" "argocd" {
 
     annotations = {
       "kubernetes.io/ingress.class"                  = "nginx"
-      "cert-manager.io/cluster-issuer"               = "letsencrypt-issuer"
+      "cert-manager.io/cluster-issuer"               = "letsencrypt-prod-issuer"
       "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
     }
   }
