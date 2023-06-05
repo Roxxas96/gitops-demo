@@ -8,6 +8,12 @@ variable "domain" {
   description = "The domain of the namespace, ex: 'app', 'monitoring', 'scurity'"
 }
 
+variable "additional_labels" {
+  type        = map(string)
+  description = "Additional labels to be added to the namespace"
+  default     = {}
+}
+
 variable "quota" {
   type = object({
     requests_cpu    = string

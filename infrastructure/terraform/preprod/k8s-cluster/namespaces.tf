@@ -11,6 +11,10 @@ module "namespace_words" {
   #   limits_memory   = "768Mi"
   # }
 
+  additional_labels = {
+    "istio-injection" = "enabled"
+  }
+
   admins  = var.cluster_admins
   editors = var.cluster_managers
   readers = var.cluster_devs
