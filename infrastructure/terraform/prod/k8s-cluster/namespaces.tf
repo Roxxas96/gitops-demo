@@ -26,7 +26,7 @@ module "namespace_cert-manager" {
   editors = var.cluster_managers
   readers = var.cluster_devs
 
-  count = var.enable_ingress ? 1 : 0
+  count = var.minimal_mode ? 0 : 1
 }
 
 module "namespace_ingress-nginx" {
@@ -39,7 +39,7 @@ module "namespace_ingress-nginx" {
   editors = var.cluster_managers
   readers = var.cluster_devs
 
-  count = var.enable_ingress ? 1 : 0
+  count = var.minimal_mode ? 0 : 1
 }
 
 module "namespace_kube-prometheus-stack" {
