@@ -3,9 +3,9 @@ variable "environment" {
   description = "The environment of the cluster, ex: 'preprod', 'prod'"
 }
 
-variable "kube-prometheus-stack-namespace" {
+variable "namespace" {
   type        = string
-  description = "The namespace of the kube-prometheus-stack"
+  description = "The namespace where the monitoring tools will be deployed"
 }
 
 variable "domain" {

@@ -8,3 +8,8 @@ data:
   database_port: {{ .Values.config.database_port | quote }}
   database_host: {{ .Values.config.database_host | quote }}
   database_dialect: {{ .Values.config.database_dialect | quote }}
+  metric_exporter_url: {{ .Values.config.metric_exporter_url | quote }}
+  metric_interval: {{ .Values.config.metric_interval | quote }}
+  trace_exporter_url: {{ .Values.config.trace_exporter_url | quote }}
+  log_exporter_url: {{ .Values.config.log_exporter_url | quote }}
+  service_name: {{ .Values.config.service_name | quote }}

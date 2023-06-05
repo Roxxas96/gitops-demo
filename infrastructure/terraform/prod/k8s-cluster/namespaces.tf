@@ -4,7 +4,7 @@ module "namespace_words" {
   name   = "words"
   domain = "app"
 
-  quota = {
+  quota = var.minimal_mode ? null : {
     requests_cpu    = "1400m"
     requests_memory = "1792Mi"
     limits_cpu      = "2200m"
@@ -42,10 +42,10 @@ module "namespace_ingress-nginx" {
   count = var.minimal_mode ? 0 : 1
 }
 
-module "namespace_kube-prometheus-stack" {
+module "namespace_monitoring" {
   source = "../../modules/namespace"
 
-  name   = "kube-prometheus-stack"
+  name   = "monitoring"
   domain = "monitoring"
 
   admins  = var.cluster_admins

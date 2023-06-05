@@ -1,0 +1,8 @@
+prometheusOperator:
+  releaseName: kube-prometheus-stack
+
+collectors:
+  main:
+    otlpEndpoint: jaeger-collector:4317
+    lokiEndpoint: http://loki:3100/loki/api/v1/push
+    prometheusEndpoint: 0.0.0.0:9464

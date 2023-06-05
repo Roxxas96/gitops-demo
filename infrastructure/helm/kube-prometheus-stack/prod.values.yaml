@@ -1,0 +1,14 @@
+grafana:
+  additionalDataSources:
+    - name: Jaeger
+      uid: webstore-traces
+      type: jaeger
+      url: http://jaeger-query:16686/jaeger/ui
+      editable: true
+      isDefault: false
+    - name: Loki
+      uid: webstore-logs
+      type: loki
+      url: http://loki:3100
+      editable: true
+      isDefault: false

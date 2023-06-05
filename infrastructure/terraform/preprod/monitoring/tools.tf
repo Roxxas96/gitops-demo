@@ -3,8 +3,8 @@ module "monitoring-tools" {
 
   environment = "preprod"
 
-  domain                          = var.domain
-  kube-prometheus-stack-namespace = "kube-prometheus-stack"
+  domain    = var.domain
+  namespace = "monitoring"
 
   minminimal_mode = var.minimal_mode
 }
