@@ -24,7 +24,7 @@ spec:
       parameters:
         {{- range $k, $v := .helm.extraParameters }}
         - name: {{ $k }}
-          value: {{ $v }}
+          value: {{ $v | quote }}
         {{- end }}
       {{- end }}
     {{- end }}
