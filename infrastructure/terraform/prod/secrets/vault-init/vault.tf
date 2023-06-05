@@ -59,5 +59,5 @@ resource "kubernetes_ingress_v1" "vault" {
     }
   }
 
-  count = var.enable_ingress ? 1 : 0
+  count = var.minimal_mode ? 0 : 1
 }

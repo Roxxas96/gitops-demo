@@ -13,8 +13,8 @@ variable "domain" {
   description = "The domain name of the monitoring tools"
 }
 
-variable "enable_ingress" {
+variable "minimal_mode" {
   type        = bool
-  description = "Enable ingress resources for grafana"
-  default     = true
+  description = "Enable minimal mode with disabled ingress, low or no persistence, etc. Designed for local development like k3d or minikube"
+  default     = false
 }

@@ -1,2 +1,2 @@
-enable_ingress = false
+minimal_mode    = true
 kubeconfig_path = "~/.kube/gitops-demo-local.kubeconfig"

@@ -16,8 +16,8 @@ variable "cluster_devs" {
   default     = []
 }
 
-variable "enable_ingress" {
+variable "minimal_mode" {
   type        = bool
-  description = "Enable ingress controller & cert-manager"
-  default     = true
+  description = "Enable minimal mode with disabled ingress, low or no persistence, etc. Designed for local development like k3d or minikube"
+  default     = false
 }

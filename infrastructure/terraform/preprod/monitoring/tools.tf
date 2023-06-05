@@ -6,5 +6,5 @@ module "monitoring-tools" {
   domain                          = var.domain
   kube-prometheus-stack-namespace = "kube-prometheus-stack"
 
-  enable_ingress = var.enable_ingress
+  minminimal_mode = var.minimal_mode
 }
