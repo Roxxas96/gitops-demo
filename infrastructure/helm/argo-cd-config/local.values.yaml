@@ -24,6 +24,7 @@ applications:
           - ../prod.values.yaml
         extraParameters:
           config.database_name: word1
+          ingress.enabled: "false"
     destination:
       server: https://kubernetes.default.svc
       namespace: words
@@ -40,6 +41,7 @@ applications:
           - ../prod.values.yaml
         extraParameters:
           config.database_name: word2
+          ingress.enabled: "false"
     destination:
       server: https://kubernetes.default.svc
       namespace: words
@@ -56,6 +58,7 @@ applications:
           - ../prod.values.yaml
         extraParameters:
           config.database_name: word3
+          ingress.enabled: "false"
     destination:
       server: https://kubernetes.default.svc
       namespace: words
@@ -72,6 +75,7 @@ applications:
           - ../prod.values.yaml
         extraParameters:
           config.services_url: "http://localhost:8081;http://localhost:8082;http://localhost:8083"
+          ingress.enabled: "false"
     destination:
       server: https://kubernetes.default.svc
       namespace: words
