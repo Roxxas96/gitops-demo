@@ -1,0 +1,8 @@
+admissionWebhooks:
+  autoGenerateCert: true
+  certManager:
+    enabled: false
+
+manager:
+  serviceMonitor:
+    enabled: true

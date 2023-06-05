@@ -64,6 +64,31 @@ spec:
                 configMapKeyRef:
                   name: {{ include "word-service.fullname" . }}-config
                   key: database_host
+            - name: METRIC_EXPORTER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "word-service.fullname" . }}-config
+                  key: metric_exporter_url
+            - name: METRIC_INTERVAL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "word-service.fullname" . }}-config
+                  key: metric_interval
+            - name: TRACE_EXPORTER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "word-service.fullname" . }}-config
+                  key: trace_exporter_url
+            - name: LOG_EXPORTER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "word-service.fullname" . }}-config
+                  key: log_exporter_url
+            - name: SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "word-service.fullname" . }}-config
+                  key: service_name
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

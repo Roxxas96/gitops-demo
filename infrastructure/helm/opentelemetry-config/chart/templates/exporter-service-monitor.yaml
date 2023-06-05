@@ -1,0 +1,20 @@
+{{- range $k, $v := .Values.collectors }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ $k }}-collector-prometheus-exporter
+  labels:
+    monitoring: otel-collectors
+    release: {{$.Values.prometheusOperator.releaseName}}
+spec:
+  jobLabel: otel-collectors
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $k }}-collector-prometheus-exporter
+  namespaceSelector:
+    matchNames:
+      - {{$.Release.Namespace}}
+  endpoints:
+  - port: prometheus-exporter
+{{ end -}}

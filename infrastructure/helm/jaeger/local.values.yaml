@@ -1,0 +1,27 @@
+provisionDataStore:
+  cassandra: false
+
+allInOne:
+  enabled: true
+  args:
+    - "--memory.max-traces"
+    - "10000"
+    - "--query.base-path"
+    - "/jaeger/ui"
+    #--- Careful when moving these values, see /infrastructure/terraform/modules/monitoring/tools/jaeger.tf
+    - "--prometheus.server-url"
+    - "http://kube-prometheus-stack-prometheus-server:9090"
+    #---
+  extraEnv:
+    - name: METRICS_STORAGE_TYPE
+      value: prometheus
+
+storage:
+  type: none
+
+agent:
+  enabled: false
+collector:
+  enabled: false
+query:
+  enabled: false

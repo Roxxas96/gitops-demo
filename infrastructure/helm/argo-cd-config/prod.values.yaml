@@ -24,6 +24,7 @@ applications:
           - ../prod.values.yaml
         extraParameters:
           config.database_name: word1
+          config.service_name: word-1
           ingress.hosts[0].host: word-1.gitops-demo.a-gomez.fr
           ingress.tls[0].hosts[0]: word-1.gitops-demo.a-gomez.fr
           ingress.tls[0].secretName: word-1-tls
@@ -43,6 +44,7 @@ applications:
           - ../prod.values.yaml
         extraParameters:
           config.database_name: word2
+          config.service_name: word-2
           ingress.hosts[0].host: word-2.gitops-demo.a-gomez.fr
           ingress.tls[0].hosts[0]: word-2.gitops-demo.a-gomez.fr
           ingress.tls[0].secretName: word-2-tls
@@ -62,6 +64,7 @@ applications:
           - ../prod.values.yaml
         extraParameters:
           config.database_name: word3
+          config.service_name: word-3
           ingress.hosts[0].host: word-3.gitops-demo.a-gomez.fr
           ingress.tls[0].hosts[0]: word-3.gitops-demo.a-gomez.fr
           ingress.tls[0].secretName: word-3-tls
