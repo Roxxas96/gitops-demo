@@ -1,0 +1,7 @@
+global:
+  tracer:
+    zipkin:
+      address: jaeger-collector.monitoring:9411
+
+pilot:
+  traceSampling: 100
