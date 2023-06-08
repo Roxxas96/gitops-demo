@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/axios": "^2.0.0",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
@@ -37,6 +38,7 @@
     "@opentelemetry/sdk-logs": "^0.39.1",
     "@opentelemetry/sdk-node": "^0.39.1",
     "@opentelemetry/semantic-conventions": "^1.13.0",
+    "axios": "^1.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "helmet": "^6.1.5",

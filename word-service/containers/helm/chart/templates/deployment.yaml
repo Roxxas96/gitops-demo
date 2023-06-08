@@ -89,6 +89,13 @@ spec:
                 configMapKeyRef:
                   name: {{ include "word-service.fullname" . }}-config
                   key: service_name
+            {{- if .Values.config.forwarding.enabled }}
+            - name: FORWARD_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "word-service.fullname" . }}-config
+                  key: forward_service
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
