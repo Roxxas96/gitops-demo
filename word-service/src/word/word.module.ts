@@ -4,6 +4,7 @@ import { WordController } from './word.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Word } from './entities/word.entity';
 import { OpenTelemetryModule } from 'nestjs-otel';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -18,6 +19,9 @@ import { OpenTelemetryModule } from 'nestjs-otel';
           },
         },
       },
+    }),
+    HttpModule.register({
+      baseURL: process.env.FORWARD_SERVICE || 'http://localhost:3001',
     }),
   ],
   controllers: [WordController],

@@ -13,3 +13,6 @@ data:
   trace_exporter_url: {{ .Values.config.trace_exporter_url | quote }}
   log_exporter_url: {{ .Values.config.log_exporter_url | quote }}
   service_name: {{ .Values.config.service_name | quote }}
+  {{- if .Values.config.forwarding.enabled }}
+  forward_service: {{ .Values.config.forwarding.url | quote }}
+  {{- end }}

@@ -28,6 +28,9 @@ config:
   trace_exporter_url: http://main-collector.monitoring:4317
   log_exporter_url: http://main-collector.monitoring:4317
   service_name: "word"
+  forwarding:
+    enabled: false
+    url: http://word-service-2
 
 serviceAccount:
   # Specifies whether a service account should be created

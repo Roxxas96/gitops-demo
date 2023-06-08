@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateWordDto } from './dto/create-word.dto';
 import { UpdateWordDto } from './dto/update-word.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Word } from './entities/word.entity';
 import { OtelMethodCounter, Span } from 'nestjs-otel';
 import { OTELLogger } from 'src/logger';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+import { AxiosError } from 'axios';
 
 export enum WordServiceError {
   WORD_EXISTS = 'Word already exists',
@@ -19,6 +22,7 @@ export class WordService {
   constructor(
     @InjectModel(Word)
     private readonly wordModel: typeof Word,
+    private readonly httpService: HttpService,
   ) {}
 
   @Span('create word')
@@ -124,20 +128,42 @@ export class WordService {
   @OtelMethodCounter()
   random() {
     return new Promise((resolve, reject) => {
-      this.wordModel
-        .findOne({ order: [this.wordModel.sequelize.random()] })
-        .then((word) => {
-          if (!word) {
-            this.logger.debug(`Database empty when trying to find random word`);
-            return reject(Error(WordServiceError.WORD_EMPTY));
-          }
+      switch (Boolean(process.env.FORWARD_SERVICE)) {
+        case true:
+          firstValueFrom(this.httpService.post('/word/random'))
+            .then((response) => {
+              return resolve(response.data);
+            })
+            .catch((error: AxiosError) => {
+              if (error.response.status === HttpStatus.NOT_FOUND) {
+                this.logger.debug(
+                  `Forward service returned 404 when trying to find random word`,
+                );
+                return reject(Error(WordServiceError.WORD_EMPTY));
+              }
 
-          return resolve(word);
-        })
-        .catch((error) => {
-          this.logger.error(error.message);
-          return reject(error);
-        });
+              this.logger.error(error.message);
+              return reject(error);
+            });
+          break;
+        case false:
+          this.wordModel
+            .findOne({ order: [this.wordModel.sequelize.random()] })
+            .then((word) => {
+              if (!word) {
+                this.logger.debug(
+                  `Database empty when trying to find random word`,
+                );
+                return reject(Error(WordServiceError.WORD_EMPTY));
+              }
+
+              return resolve(word);
+            })
+            .catch((error) => {
+              this.logger.error(error.message);
+              return reject(error);
+            });
+      }
     });
   }
 
