@@ -1,17 +1,11 @@
-resource "helm_release" "ingress-nginx" {
-  name      = "ingress-nginx"
-  namespace = var.ingress-nginx-namespace
-
-  chart  = "${path.module}/../../../helm/ingress-nginx/chart"
-  values = ["${file("${path.module}/../../../helm/ingress-nginx/${var.environment}.values.yaml")}"]
-}
-
 resource "helm_release" "cert-manager" {
   name      = "cert-manager"
   namespace = var.cert-manager-namespace
 
   chart  = "${path.module}/../../../helm/cert-manager/chart"
   values = ["${file("${path.module}/../../../helm/cert-manager/${var.environment}.values.yaml")}"]
+
+  count = var.environment == "local" ? 0 : 1
 }
 
 resource "helm_release" "cert-manager-issuers" {
@@ -24,4 +18,6 @@ resource "helm_release" "cert-manager-issuers" {
   depends_on = [
     helm_release.cert-manager
   ]
+
+  count = var.environment == "local" ? 0 : 1
 }

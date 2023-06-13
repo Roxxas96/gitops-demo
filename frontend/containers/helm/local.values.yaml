@@ -1,0 +1,3 @@
+image:
+  repository: gitops-demo-frontend
+  tag: "local"

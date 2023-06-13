@@ -1,10 +1,9 @@
-module "ingress" {
-  source = "../../modules/ingress"
+module "networking" {
+  source = "../../modules/networking"
 
   environment = "preprod"
 
   ingress-nginx-namespace = module.namespace_ingress-nginx[0].namespace
   cert-manager-namespace  = module.namespace_cert-manager[0].namespace
-
-  count = var.minimal_mode ? 1 : 0
+  istio-namespace         = module.namespace_istio-system.namespace
 }
