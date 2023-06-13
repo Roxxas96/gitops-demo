@@ -1,6 +1,6 @@
 data "vault_kv_secret_v2" "app_database-password" {
   mount = "kvv2"
-  name  = "prod/app/word-service/database/password"
+  name  = "${var.environment}/app/word-service/database/password"
 }
 
 resource "helm_release" "postgres" {

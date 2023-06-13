@@ -1,6 +1,6 @@
 variable "environment" {
   type        = string
-  description = "The environment of the cluster, ex: 'preprod', 'prod'"
+  description = "The environment of the cluster, ex: 'preprod', 'prod', 'local'"
 }
 
 variable "words-namespace" {

@@ -15,9 +15,3 @@ variable "cluster_devs" {
   description = "The users that will have cluster-reader privileges"
   default     = []
 }
-
-variable "minimal_mode" {
-  type        = bool
-  description = "Enable minimal mode with disabled ingress, low or no persistence, etc. Designed for local development like k3d or minikube"
-  default     = false
-}

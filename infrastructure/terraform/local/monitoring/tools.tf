@@ -1,8 +1,7 @@
 module "monitoring-tools" {
   source = "../../modules/monitoring/tools"
 
-  environment = "prod"
+  environment = "local"
 
-  domain    = var.domain
   namespace = "monitoring"
 }

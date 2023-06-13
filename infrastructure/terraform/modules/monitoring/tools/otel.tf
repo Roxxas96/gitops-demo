@@ -1,17 +1,17 @@
 resource "helm_release" "otel-operator" {
   name      = "otel-operator"
-  namespace = data.kubernetes_namespace_v1.monitoring.metadata[0].name
+  namespace = var.namespace
 
   chart  = "${path.module}/../../../../helm/opentelemetry-operator/chart"
-  values = ["${file("${path.module}/../../../../helm/opentelemetry-operator/${var.minimal_mode ? "local" : var.environment}.values.yaml")}"]
+  values = ["${file("${path.module}/../../../../helm/opentelemetry-operator/${var.environment}.values.yaml")}"]
 }
 
 resource "helm_release" "otel-config" {
   name      = "otel-config"
-  namespace = data.kubernetes_namespace_v1.monitoring.metadata[0].name
+  namespace = var.namespace
 
   chart  = "${path.module}/../../../../helm/opentelemetry-config/chart"
-  values = ["${file("${path.module}/../../../../helm/opentelemetry-config/${var.minimal_mode ? "local" : var.environment}.values.yaml")}"]
+  values = ["${file("${path.module}/../../../../helm/opentelemetry-config/${var.environment}.values.yaml")}"]
 
   set {
     name  = "collectors.main.otlpEndpoint"
@@ -24,7 +24,7 @@ resource "helm_release" "otel-config" {
 resource "kubernetes_service_v1" "otel-collector-prometheus-exporter" {
   metadata {
     name      = "main-collector-prometheus-exporter"
-    namespace = data.kubernetes_namespace_v1.monitoring.metadata[0].name
+    namespace = var.namespace
 
     labels = {
       "app.kubernetes.io/component" = "opentelemetry-collector"

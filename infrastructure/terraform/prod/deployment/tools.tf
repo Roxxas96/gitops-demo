@@ -1,9 +1,3 @@
-data "kubernetes_namespace_v1" "argocd" {
-  metadata {
-    name = "argocd"
-  }
-}
-
 data "vault_kv_secret_v2" "argocd_admin-password" {
   name  = "prod/deployment/argocd/admin-password"
   mount = "kvv2"
@@ -70,6 +64,4 @@ resource "kubernetes_ingress_v1" "argocd" {
       }
     }
   }
-
-  count = var.minimal_mode ? 0 : 1
 }

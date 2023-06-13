@@ -7,6 +7,6 @@ data "kubernetes_namespace_v1" "vault" {
 module "vault" {
   source = "../../../modules/secrets/tools"
 
-  environment = "prod"
-  namespace   = data.kubernetes_namespace_v1.vault.metadata[0].name
+  environment = "local"
+  namespace = data.kubernetes_namespace_v1.vault.metadata[0].name
 }
