@@ -2,7 +2,7 @@ name: Versioning
 
 on:
   push:
-    branches: ["**"]
+    branches: ["**", "!main"]
 
 jobs:
   bump_version:
