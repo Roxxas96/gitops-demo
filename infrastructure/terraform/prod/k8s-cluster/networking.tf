@@ -3,7 +3,7 @@ module "networking" {
 
   environment = "prod"
 
-  ingress-nginx-namespace = module.namespace_ingress-nginx[0].namespace
-  cert-manager-namespace  = module.namespace_cert-manager[0].namespace
+  ingress-nginx-namespace = module.namespace_ingress-nginx.namespace
+  cert-manager-namespace  = module.namespace_cert-manager.namespace
   istio-namespace         = module.namespace_istio-system.namespace
 }
