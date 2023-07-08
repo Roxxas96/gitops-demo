@@ -16,6 +16,7 @@ resource "vault_kv_secret_v2" "argocd_admin-password" {
 variable "gitops-demo_ssh-key" {
   type        = string
   description = "The private key for the gitops-demo repository"
+  sensitive   = true
 }
 
 resource "vault_kv_secret_v2" "gitops-demo_ssh-key" {
