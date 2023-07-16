@@ -5,10 +5,10 @@ module "namespace_words" {
   domain = "app"
 
   quota = {
-    requests_cpu    = "1400m"
-    requests_memory = "1792Mi"
-    limits_cpu      = "2200m"
-    limits_memory   = "2816Mi"
+    requests_cpu    = "2000m"
+    requests_memory = "12000Mi"
+    limits_cpu      = "2500m"
+    limits_memory   = "20000Mi"
   }
 
   additional_labels = {
