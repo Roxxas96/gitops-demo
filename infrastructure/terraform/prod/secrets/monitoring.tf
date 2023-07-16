@@ -15,7 +15,7 @@ resource "vault_kv_secret_v2" "monitoring_grafana-admin-password" {
 
   data_json = jsonencode(
     {
-      password = var.override_monitoring_grafana-admin-password == null ? var.override_monitoring_grafana-admin-password : random_password.monitoring_grafana-admin-password.result
+      password = var.override_monitoring_grafana-admin-password == null ? random_password.monitoring_grafana-admin-password.result : var.override_monitoring_grafana-admin-password
     }
   )
 }
