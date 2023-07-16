@@ -15,7 +15,8 @@ resource "vault_kv_secret_v2" "deployment_argocd-admin-password" {
 
   data_json = jsonencode(
     {
-      password = var.override_deployment_argocd-admin-password == null ? random_password.deployment_argocd-admin-password.bcrypt_hash : var.override_deployment_argocd-admin-password
+      password        = var.override_deployment_argocd-admin-password == null ? random_password.deployment_argocd-admin-password.result : var.override_deployment_argocd-admin-password
+      bcrypt_password = var.override_deployment_argocd-admin-password == null ? random_password.deployment_argocd-admin-password.bcrypt_hash : bcrypt(var.override_deployment_argocd-admin-password)
     }
   )
 }

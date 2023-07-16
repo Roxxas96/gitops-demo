@@ -13,7 +13,7 @@ resource "helm_release" "argocd" {
   set_sensitive {
     name = "configs.secret.argocdServerAdminPassword"
     # Bcrypt hash of the password
-    value = data.vault_kv_secret_v2.argocd_admin-password.data["password"]
+    value = data.vault_kv_secret_v2.argocd_admin-password.data["bcrypt_password"]
   }
 }
 
