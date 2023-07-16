@@ -15,7 +15,7 @@ resource "vault_kv_secret_v2" "app_word-service-database-password" {
 
   data_json = jsonencode(
     {
-      password = var.override_app_word-service-database-password == null ? var.override_app_word-service-database-password : random_password.app_word-service-database-password.result
+      password = var.override_app_word-service-database-password == null ? random_password.app_word-service-database-password.result : var.override_app_word-service-database-password
     }
   )
 }

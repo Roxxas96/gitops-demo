@@ -6,7 +6,7 @@ variable "override_deployment_argocd-admin-password" {
   type        = string
   description = "The password for the ArgoCD admin user"
   sensitive   = true
-  default = null
+  default     = null
 }
 
 resource "vault_kv_secret_v2" "deployment_argocd-admin-password" {
@@ -15,7 +15,7 @@ resource "vault_kv_secret_v2" "deployment_argocd-admin-password" {
 
   data_json = jsonencode(
     {
-      password = var.override_deployment_argocd-admin-password == null ? var.override_deployment_argocd-admin-password : random_password.deployment_argocd-admin-password.bcrypt_hash
+      password = var.override_deployment_argocd-admin-password == null ? random_password.deployment_argocd-admin-password.bcrypt_hash : var.override_deployment_argocd-admin-password
     }
   )
 }
