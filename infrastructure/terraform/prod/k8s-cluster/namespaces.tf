@@ -42,17 +42,6 @@ module "namespace_ingress-nginx" {
   readers = var.cluster_devs
 }
 
-module "namespace_istio-system" {
-  source = "../../modules/namespace"
-
-  name   = "istio-system"
-  domain = "networking"
-
-  admins  = var.cluster_admins
-  editors = var.cluster_managers
-  readers = var.cluster_devs
-}
-
 module "namespace_monitoring" {
   source = "../../modules/namespace"
 
