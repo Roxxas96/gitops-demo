@@ -10,6 +10,13 @@ projects:
     destinations:
       - namespace: words
         server: https://kubernetes.default.svc
+  review:
+    description: "Project that holds all the applications to review environments"
+    sourceRepos:
+      - git@github.com:Roxxas96/gitops-demo.git
+    destinations:
+      - namespace: "review-**"
+        server: https://kubernetes.default.svc
 
 applications:
   prod-word-service-1:
