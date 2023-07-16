@@ -14,8 +14,3 @@ variable "cert-manager-namespace" {
   description = "The namespace where the cert-manager release will be deployed"
   default     = null
 }
-
-variable "istio-namespace" {
-  type        = string
-  description = "The namespace where the istio release will be deployed"
-}
