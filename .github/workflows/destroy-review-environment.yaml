@@ -1,0 +1,48 @@
+name: Destroy Review Environment
+
+on:
+  pull_request_target:
+    types: [closed]
+
+jobs:
+  destroy-review-env:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Determine Environment name
+        id: env
+        run: |
+          echo "branchName=$(echo ${{ github.head_ref }} | sed 's/\//-/g')" | tee -a $GITHUB_OUTPUT
+          echo "shortSha=$(echo ${{ github.sha }} | cut -c 1-7)" | tee -a $GITHUB_OUTPUT
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        id: init
+        run: |
+          cd infrastructure/terraform/review
+
+          terraform init -input=false ${{ format(secrets.review_backend_config, steps.env.outputs.branchName) }}
+
+      - name: Terraform Destroy
+        id: destroy
+        run: |
+          echo "${{ secrets.review_kubeconfig }}" > /tmp/kubeconfig
+
+          cd infrastructure/terraform/review
+
+          echo 'kubeconfig_path="/tmp/kubeconfig"' >> terraform.tfvars
+          echo 'target="${{ github.head_ref }}"' >> terraform.tfvars
+          echo 'target_sha="${{ steps.env.outputs.shortSha }}"' >> terraform.tfvars
+          echo '${{ secrets.review_tfvars }}' >> terraform.tfvars
+
+          terraform destroy -input=false -auto-approve
