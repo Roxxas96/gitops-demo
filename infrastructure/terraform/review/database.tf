@@ -3,7 +3,7 @@ resource "helm_release" "postgres" {
   namespace = module.review-namespace.namespace
 
   chart  = "../../helm/postgresql/chart"
-  values = ["${file("../../helm/postgresql/preprod.values.yaml")}"]
+  values = ["${file("../../helm/postgresql/review.values.yaml")}"]
 
   set_sensitive {
     name  = "global.postgresql.auth.postgresPassword"
