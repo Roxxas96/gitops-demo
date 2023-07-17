@@ -25,7 +25,6 @@ jobs:
 
       - name: Create comment with links
         uses: peter-evans/create-or-update-comment@v1
-        if: github.event.action == 'opened'
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |

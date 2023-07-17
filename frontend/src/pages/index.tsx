@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import InfoSnackbar from "@/components/InfoSnackbar";
+import NewWordModal from "@/components/NewWordModal";
 import {
   AlertColor,
   Button,
@@ -10,8 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import NewWordModal from "@/components/NewWordModal";
-import InfoSnackbar from "@/components/InfoSnackbar";
+import { useCallback, useEffect, useState } from "react";
 
 type RandomWordResponse = {
   data: {
@@ -134,6 +134,7 @@ export default function Home({ services }: { services: string[] }) {
           </Grid>
         ))}
       </Grid>
+      <Typography>Hello World</Typography>
       <Grid container justifyContent="center">
         <Button variant="contained" onClick={getWords}>
           Refresh Words
