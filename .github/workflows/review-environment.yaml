@@ -2,7 +2,6 @@ name: Review Environment
 
 on:
   pull_request:
-    branches: ["main"]
     types:
       - opened
       - closed
@@ -35,6 +34,7 @@ jobs:
       - name: Create comment with links
         uses: peter-evans/create-or-update-comment@v1
         if: github.event.action == 'opened'
+        continue-on-error: true
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
