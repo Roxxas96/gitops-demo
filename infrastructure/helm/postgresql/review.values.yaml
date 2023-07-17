@@ -17,6 +17,9 @@ primary:
       memory: 256Mi
       cpu: 250m
 
+metrics:
+  enabled: true
+
 readReplicas:
   resources:
     limits:
