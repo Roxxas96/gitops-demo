@@ -136,7 +136,7 @@ export default function Home({ services }: { services: string[] }) {
       </Grid>
       <Grid container justifyContent="center">
         <Button variant="contained" onClick={getWords}>
-          Refresh Words
+          Hello World
         </Button>
       </Grid>
     </Container>
