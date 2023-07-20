@@ -127,7 +127,7 @@ export default function Home({ services }: { services: string[] }) {
               </CardContent>
               <CardActions>
                 <Button size="small" onClick={() => handleOpenModal(key)}>
-                  Add Word
+                  Add Word !
                 </Button>
               </CardActions>
             </Card>
@@ -136,7 +136,7 @@ export default function Home({ services }: { services: string[] }) {
       </Grid>
       <Grid container justifyContent="center">
         <Button variant="contained" onClick={getWords}>
-          Hello World
+          Hello World !
         </Button>
       </Grid>
     </Container>
