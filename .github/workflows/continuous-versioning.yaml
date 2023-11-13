@@ -4,14 +4,14 @@ on:
   push:
     branches: ["main"]
     tags: ["v*.*.*"]
-  pull_request_target:
+  pull_request:
 
 env:
   REGISTRY: ghcr.io
   BASE_IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  determine-version:
+  bump-version:
     runs-on: ubuntu-latest
 
     permissions:
@@ -19,13 +19,11 @@ jobs:
 
     outputs:
       buildVersion: ${{ steps.formatVersion.outputs.buildVersion }}
-      tagTemplate: ${{ steps.tagTemplate.outputs.template }}
 
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.7
@@ -45,27 +43,31 @@ jobs:
             echo "buildVersion=${{ steps.gitversion.outputs.MajorMinorPatch }}-rc${{ steps.gitversion.outputs.CommitsSinceVersionSource }}" | tee $GITHUB_OUTPUT
           fi
 
-      - name: Format tag template
-        id: tagTemplate
+      - name: Bump Version
         run: |
-          IMAGE_NAME=$(echo "${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')
-          BRANCH_NAME=$(echo "${{ github.head_ref }}" | sed 's/\//-/g')
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c 1-7)
+          sed -i "/\"version\":/c\  \"version\": \"${{ steps.formatVersion.outputs.buildVersion }}\"," frontend/package.json
+          sed -i "/\"version\":/c\  \"version\": \"${{ steps.formatVersion.outputs.buildVersion }}\"," word-service/package.json
+          sed -i "/appVersion:/c\appVersion: \'${{ steps.formatVersion.outputs.buildVersion }}\'" frontend/containers/helm/chart/Chart.yaml
+          sed -i "/appVersion:/c\appVersion: \'${{ steps.formatVersion.outputs.buildVersion }}\'" word-service/containers/helm/chart/Chart.yaml
 
-          if [ "${{ github.event_name }}" = "pull_request_target" ]; then
-            echo "template=$IMAGE_NAME-{0}:$BRANCH_NAME-$SHORT_SHA" | tee $GITHUB_OUTPUT
-          else
-            if [ "${{ steps.gitversion.outputs.CommitsSinceVersionSource }}" = 0 ]; then
-              echo "template=$IMAGE_NAME-{0}:latest, $IMAGE_NAME-{0}:${{ steps.gitversion.outputs.MajorMinorPatch }}" | tee $GITHUB_OUTPUT
-            else
-              echo "template=$IMAGE_NAME-{0}:${{ steps.gitversion.outputs.MajorMinorPatch }}-rc${{ steps.gitversion.outputs.CommitsSinceVersionSource }}" | tee $GITHUB_OUTPUT
-            fi
-          fi
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: version-files
+          path: |
+            frontend/package.json
+            word-service/package.json
+            frontend/containers/helm/chart/Chart.yaml
+            word-service/containers/helm/chart/Chart.yaml
 
   build-push:
     runs-on: ubuntu-latest
 
-    needs: [determine-version]
+    needs: [bump-version]
+
+    concurrency:
+      group: "artifacts"
+      cancel-in-progress: false
 
     permissions:
       contents: read
@@ -79,8 +81,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Delete old version files
+        run: |
+          rm -f frontend/package.json
+          rm -f word-service/package.json
+          rm -f frontend/containers/helm/chart/Chart.yaml
+          rm -f word-service/containers/helm/chart/Chart.yaml
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
         with:
-          ref: ${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}
+          name: version-files
 
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.0.2
@@ -97,29 +109,45 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Format tag template
+        id: tags
+        run: |
+          IMAGE_NAME=$(echo "${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')
+          BRANCH_NAME=$(echo "${{ github.head_ref }}" | sed 's/\//-/g')
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c 1-7)
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "tags=$IMAGE_NAME-${{ matrix.service }}:$BRANCH_NAME-$SHORT_SHA" | tee $GITHUB_OUTPUT
+          else
+            echo "tags=$IMAGE_NAME-${{ matrix.service }}:latest, $IMAGE_NAME-${{ matrix.service }}:${{ needs.bump-version.outputs.buildVersion }}" | tee $GITHUB_OUTPUT
+          fi
+
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v4.0.0
         with:
-          context: ./${{ matrix.service }}
-          file: ./${{matrix.service}}/containers/Dockerfile
-          tags: ${{ format(needs.determine-version.outputs.tagTemplate, matrix.service) }}
+          context: ${{ matrix.service }}
+          file: ${{matrix.service}}/containers/Dockerfile
+          tags: ${{ steps.tags.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
 
       - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request_target' }}
         env:
           COSIGN_EXPERIMENTAL: "true"
-        run: echo "${{ needs.determine-version.outputs.tags }}" | xargs -I {} cosign sign -y {}@${{ steps.build-and-push.outputs.digest }}
+        run: echo "${{ steps.tags.outputs.tags }}" | xargs -I {} cosign sign -y {}@${{ steps.build-and-push.outputs.digest }}
 
-  bump-version:
+  commit-version:
     runs-on: ubuntu-latest
 
-    needs: [determine-version]
+    needs: [bump-version]
 
-    if: github.event_name == 'pull_request_target'
+    if: github.ref == 'refs/heads/main'
+
+    concurrency:
+      group: "commit-version"
+      cancel-in-progress: false
 
     permissions:
       contents: write
@@ -127,18 +155,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.head_ref }}
+          ssh-key: ${{ secrets.BOT_SSH_KEY }}
 
-      - name: Bump Version
+      - name: Delete old version files
         run: |
-          sed -i "/\"version\":/c\  \"version\": \"${{ needs.determine-version.outputs.buildVersion }}\"," ./frontend/package.json
-          sed -i "/\"version\":/c\  \"version\": \"${{ needs.determine-version.outputs.buildVersion }}\"," ./word-service/package.json
-          sed -i "/appVersion:/c\appVersion: \'${{ needs.determine-version.outputs.buildVersion }}\'" ./frontend/containers/helm/chart/Chart.yaml
-          sed -i "/appVersion:/c\appVersion: \'${{ needs.determine-version.outputs.buildVersion }}\'" ./word-service/containers/helm/chart/Chart.yaml
+          rm -f frontend/package.json
+          rm -f word-service/package.json
+          rm -f frontend/containers/helm/chart/Chart.yaml
+          rm -f word-service/containers/helm/chart/Chart.yaml
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: version-files
 
       - name: Commit Version Bump
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "build: [skip ci] bump version to ${{ needs.determine-version.outputs.buildVersion }}"
+          commit_message: "build: [skip ci] bump version to ${{ needs.bump-version.outputs.buildVersion }}"
           commit_options: "-a"
           commit_author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
