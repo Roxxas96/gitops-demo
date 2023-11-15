@@ -7,7 +7,7 @@ variable "kubernetes_cluster_version" {
 variable "kubernetes_cluster_name" {
   type        = string
   description = "Kubernetes cluster name"
-  default     = "gitops-demo-prod"
+  default     = "gitops-demo-preprod"
 }
 
 variable "kubernetes_cluster_region" {
