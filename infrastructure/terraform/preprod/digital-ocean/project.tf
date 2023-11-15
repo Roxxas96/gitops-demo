@@ -1,7 +1,7 @@
 variable "project_name" {
   type        = string
   description = "Project name"
-  default     = "gitops-demo-prod"
+  default     = "gitops-demo-preprod"
 }
 
 resource "digitalocean_project" "gitops-demo" {
