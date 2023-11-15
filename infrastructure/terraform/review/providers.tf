@@ -21,7 +21,7 @@ terraform {
     }
   }
 
-  backend "http" {
+  backend "s3" {
 
   }
 }
