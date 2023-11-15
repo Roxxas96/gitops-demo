@@ -12,8 +12,10 @@ resource "helm_release" "argocd-config" {
   name      = "argocd-config"
   namespace = data.kubernetes_namespace_v1.argocd.metadata[0].name
 
-  chart  = "../../../helm/argo-cd-config/chart"
-  values = ["${file("../../../helm/argo-cd-config/prod.values.yaml")}"]
+  chart = "../../../helm/argo-cd-config/chart"
+  values = [templatefile("../../../helm/argo-cd-config/prod.values.yaml", {
+    domain = var.domain
+  })]
 
   set_sensitive {
     name  = "repositories.gitops-demo.ssh.privateKey"
