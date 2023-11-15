@@ -14,8 +14,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
 
       - name: Determine Environment name
         id: env
@@ -46,3 +44,8 @@ jobs:
           echo '${{ secrets.review_tfvars }}' >> terraform.tfvars
 
           terraform destroy -input=false -auto-approve
+
+      - name: Delete the head branch
+        if: github.event.pull_request.merged == true
+        run: |
+          git push origin --delete ${{ github.head_ref }}
