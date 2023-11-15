@@ -8,6 +8,10 @@ jobs:
   destroy-review-env:
     runs-on: ubuntu-latest
 
+    concurrency:
+      group: "delete-review"
+      cancel-in-progress: false
+
     permissions:
       contents: read
       packages: read

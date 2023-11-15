@@ -7,6 +7,10 @@ jobs:
   update-review-env:
     runs-on: ubuntu-latest
 
+    concurrency:
+      group: "create-review"
+      cancel-in-progress: false
+
     permissions:
       contents: read
       packages: read

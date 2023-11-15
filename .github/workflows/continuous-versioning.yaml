@@ -17,6 +17,10 @@ jobs:
     permissions:
       contents: read
 
+    concurrency:
+      group: "bump-version"
+      cancel-in-progress: false
+
     outputs:
       buildVersion: ${{ steps.formatVersion.outputs.buildVersion }}
 
@@ -65,14 +69,14 @@ jobs:
 
     needs: [bump-version]
 
-    concurrency:
-      group: "artifacts"
-      cancel-in-progress: false
-
     permissions:
       contents: read
       packages: write
       id-token: write
+
+    concurrency:
+      group: "build-push-${{ matrix.service }}"
+      cancel-in-progress: false
 
     strategy:
       fail-fast: false
