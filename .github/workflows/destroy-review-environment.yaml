@@ -18,6 +18,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.BOT_SSH_KEY }}
 
       - name: Determine Environment name
         id: env
