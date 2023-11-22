@@ -5,6 +5,9 @@ terraform {
       version = "3.14.0"
     }
   }
+  backend "http" {
+    
+  }
 }
 
 variable "vault_address" {

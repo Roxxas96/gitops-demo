@@ -64,6 +64,17 @@ module "namespace_argocd" {
   readers = var.cluster_devs
 }
 
+module "namespace_flux-system" {
+  source = "../../modules/namespace"
+
+  name   = "flux-system"
+  domain = "deployment"
+
+  admins  = var.cluster_admins
+  editors = var.cluster_managers
+  readers = var.cluster_devs
+}
+
 module "namespace_vault" {
   source = "../../modules/namespace"
 

@@ -14,6 +14,14 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.19.0"
     }
+
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = "1.14.0"
+    }
+  }
+  backend "http" {
+    
   }
 }
 
@@ -47,6 +55,11 @@ variable "kubeconfig_context" {
 }
 
 provider "kubernetes" {
+  config_path    = var.kubeconfig_path
+  config_context = var.kubeconfig_context
+}
+
+provider "kubectl" {
   config_path    = var.kubeconfig_path
   config_context = var.kubeconfig_context
 }

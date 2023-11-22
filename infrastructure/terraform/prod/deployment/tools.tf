@@ -65,3 +65,13 @@ resource "kubernetes_ingress_v1" "argocd" {
     }
   }
 }
+
+resource "helm_release" "fluxcd" {
+  name      = "fluxcd"
+  namespace = data.kubernetes_namespace_v1.flux-system.metadata[0].name
+
+  repository = "https://fluxcd-community.github.io/helm-charts"
+  chart      = "flux2"
+
+  values = ["${file("./values/flux2.values.yaml")}"]
+}

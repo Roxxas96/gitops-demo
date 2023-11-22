@@ -5,6 +5,9 @@ terraform {
       version = "2.32.0"
     }
   }
+  backend "http" {
+
+  }
 }
 
 variable "digitalocean_token" {

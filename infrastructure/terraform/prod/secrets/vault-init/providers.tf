@@ -10,6 +10,9 @@ terraform {
       version = "2.19.0"
     }
   }
+  backend "http" {
+    
+  }
 }
 
 variable "kubeconfig_path" {

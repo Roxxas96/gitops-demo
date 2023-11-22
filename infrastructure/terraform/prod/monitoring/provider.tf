@@ -15,6 +15,9 @@ terraform {
       version = "2.19.0"
     }
   }
+  backend "http" {
+    
+  }
 }
 
 variable "vault_address" {
