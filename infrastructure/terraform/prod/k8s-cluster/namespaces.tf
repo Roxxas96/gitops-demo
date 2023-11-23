@@ -85,3 +85,13 @@ module "namespace_vault" {
   editors = var.cluster_managers
   readers = var.cluster_devs
 }
+module "namespace_test" {
+  source = "../../modules/namespace"
+
+  name   = "test"
+  domain = "secrets"
+
+  admins  = var.cluster_admins
+  editors = var.cluster_managers
+  readers = var.cluster_devs
+}
